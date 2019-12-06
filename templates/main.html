@@ -6,7 +6,6 @@
         <h1>Local Politics Information</h1>
         <div><a href="{{ host }}about">About</a></div>
         <p>{% if msg %} {{ msg }} {% endif %}</p>
-        <p>Click the button to get your coordinates.</p>
 
 
     <div id="demo">
@@ -14,9 +13,10 @@
     </div>
 </body>
 
-    <script>
+<script>
     var x = document.getElementById("demo");
-
+    var lat;
+    var long;
     function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
@@ -25,10 +25,26 @@
     }
     var ip = '<%=request.getRemoteHost();%>';
     }
-
     function showPosition(position) {
         x.innerHTML = "Latitude: " + position.coords.latitude +
         "<br>Longitude: " + position.coords.longitude;
+        lat = position.coords.latitude;
+        long = position.coords.longitude;
+    };
+
+    // Create a request variable and assign a new XMLHttpRequest object to it.
+    var request = new XMLHttpRequest()
+
+    // Open a new connection, using the GET request on the URL endpoint
+    request.open('GET', 'https://api.opencagedata.com/geocode/v1/json?q=' + lat + "+" + long + "&key=1c741fcabe13477088a9ca1b729d480e", true)
+
+    request.onload = function() {
+     //Begin accessing JSON data here
     }
-    </script>
+
+    // Send request
+    request.send()
+</script>
+
+
 </html>
