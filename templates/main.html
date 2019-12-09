@@ -8,42 +8,66 @@
         <p>{% if msg %} {{ msg }} {% endif %}</p>
 
 
-    <div id="demo">
+    <div id="demo"></div>
 
-    </div>
 </body>
 
 <script>
     var x = document.getElementById("demo");
-    var lat;
-    var long;
+
+    var latitude = 0;
+    var longitude = 0;
+
+    var api_url = 'https://api.opencagedata.com/geocode/v1/json'
+    var apikey = '1c741fcabe13477088a9ca1b729d480e';
+    var request_url;
+
     function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
     }
-    var ip = '<%=request.getRemoteHost();%>';
-    }
+
     function showPosition(position) {
-        x.innerHTML = "Latitude: " + position.coords.latitude +
-        "<br>Longitude: " + position.coords.longitude;
-        lat = position.coords.latitude;
-        long = position.coords.longitude;
-    };
-
-    // Create a request variable and assign a new XMLHttpRequest object to it.
-    var request = new XMLHttpRequest()
-
-    // Open a new connection, using the GET request on the URL endpoint
-    request.open('GET', 'https://api.opencagedata.com/geocode/v1/json?q=' + lat + "+" + long + "&key=1c741fcabe13477088a9ca1b729d480e", true)
-
-    request.onload = function() {
-     //Begin accessing JSON data here
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        x.innerHTML = "Latitude: " + latitude +
+        "<br>Longitude: " + longitude;
+        /*request_url = api_url
+        + '?q='
+        + latitude.toString()
+        + '+'
+        + longitude.toString()
+        + '&key='
+        + apikey;*/
+        reverseGeocode(latitude, longitude);
     }
 
-    // Send request
-    request.send()
+    function reverseGeocode(lat, long) {
+         // Create a request variable and assign a new XMLHttpRequest object to it.
+        var request = new XMLHttpRequest()
+
+        //Sample values were for testing and were random
+        //latitude = '57.9';
+        //longitude = '34.5';
+
+        // Open a new connection, using the GET request on the URL endpoint
+
+
+        console.log("Latitude = " + latitude);
+        console.log("Longitude = " + longitude);
+        request.open('GET', 'https://api.opencagedata.com/geocode/v1/json?q=' + String(lat) + '+' + String(long) + '&key=1c741fcabe13477088a9ca1b729d480e', true)
+
+        request.onload = function() {
+            //Begin accessing JSON data here
+        }
+
+        // Send request
+        request.send();
+    }
+
 </script>
 
 
